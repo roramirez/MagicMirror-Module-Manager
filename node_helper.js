@@ -7,6 +7,8 @@
 
 var NodeHelper = require("node_helper");
 var request = require("request");
+var url = require("url");
+var querystring = require('querystring');
 
 
 module.exports = NodeHelper.create({
@@ -44,7 +46,12 @@ module.exports = NodeHelper.create({
 
 	// get modules from API config
 	getModulesAvailables: function(req, res) {
-		request({uri: this.config.urlApiModule, encoding: null, headers: this.getHeaderRequest()}).pipe(res);
+		var query = url.parse(req.url, true).query;
+		var urlApi = this.config.urlApiModule;
+		if (Object.keys(query).length > 0) {
+			urlApi += "?" + querystring.stringify(query);
+		}
+		request({uri: urlApi, encoding: null, headers: this.getHeaderRequest()}).pipe(res);
 	},
 
 
