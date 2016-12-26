@@ -3,6 +3,7 @@
 /* Magic Mirror
  * Module: Manager Module
  *
+ * By Rodrigo Ramìrez Norambuena https://rodrigoramirez.com
  * MIT Licensed.
  */
 
