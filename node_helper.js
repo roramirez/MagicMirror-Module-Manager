@@ -11,6 +11,7 @@ var url = require("url");
 var querystring = require('querystring');
 var simpleGit = require("simple-git");
 var path = require("path");
+var fs = require("fs");
 
 
 module.exports = NodeHelper.create({
@@ -69,6 +70,32 @@ module.exports = NodeHelper.create({
 		path_to_clone = path.resolve(global.root_path + "/modules/third/" + name);
 		var git = simpleGit();
 		git.clone(url, path_to_clone);
+	},
+
+	// remove directory module
+	removeModule: function(name) {
+		path_to_remove = path.resolve(global.root_path + "/modules/third/" + name);
+		this.rmDir(path_to_remove);
+	},
+
+	// code: https://gist.github.com/tkihira/2367067
+	rmDir: function(dir) {
+		var list = fs.readdirSync(dir);
+		for(var i = 0; i < list.length; i++) {
+			var filename = path.join(dir, list[i]);
+			var stat = fs.statSync(filename);
+
+			if(filename == "." || filename == "..") {
+				// pass these files
+			} else if(stat.isDirectory()) {
+				// rmdir recursively
+				this.rmDir(filename);
+			} else {
+				// rm fiilename
+				fs.unlinkSync(filename);
+			}
+		}
+		fs.rmdirSync(dir);
 	}
 
 });
