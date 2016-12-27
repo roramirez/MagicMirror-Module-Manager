@@ -9,6 +9,8 @@ var NodeHelper = require("node_helper");
 var request = require("request");
 var url = require("url");
 var querystring = require('querystring');
+var simpleGit = require("simple-git");
+var path = require("path");
 
 
 module.exports = NodeHelper.create({
@@ -59,6 +61,14 @@ module.exports = NodeHelper.create({
 		nodeVersion = Number(process.version.match(/^v(\d+\.\d+)/)[1]);
 		headers =  {"User-Agent": "Mozilla/5.0 (Node.js "+ nodeVersion + ") MagicMirror/"  + global.version +  " (https://github.com/MichMich/MagicMirror/)"}
 		return headers;
+	},
+
+
+	// clone repository pass by params into Third modules directory
+	cloneRepository: function(url, name) {
+		path_to_clone = path.resolve(global.root_path + "/modules/third/" + name);
+		var git = simpleGit();
+		git.clone(url, path_to_clone);
 	}
 
 });
