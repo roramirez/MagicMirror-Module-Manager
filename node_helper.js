@@ -44,8 +44,15 @@ module.exports = NodeHelper.create({
 		this.expressApp.get("/module-manager/modules/availables", function(req, res) {
 			self.getModulesAvailables(req, res);
 		});
+		this.expressApp.get("/module-manager/uninstall/:module_name", function(req, res) {
+			if (self.removeModule(req.params.module_name)) {
+				res.send({status: true});
+			} else {
+				res.statusCode = 400; //maybe will be good use other HTTP code :)
+				res.send({status: false});
+			}
+		});
 	},
-
 
 	// get modules from API config
 	getModulesAvailables: function(req, res) {
@@ -75,7 +82,12 @@ module.exports = NodeHelper.create({
 	// remove directory module
 	removeModule: function(name) {
 		path_to_remove = path.resolve(global.root_path + "/modules/third/" + name);
-		this.rmDir(path_to_remove);
+		try {
+			this.rmDir(path_to_remove);
+			return true;
+		} catch(err) {
+			return;
+		}
 	},
 
 	// code: https://gist.github.com/tkihira/2367067
