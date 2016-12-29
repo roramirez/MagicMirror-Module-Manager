@@ -1,0 +1,26 @@
+{
+  "name": "MagicMirror-Module-Manager",
+  "version": "0.1.0",
+  "description": "This module for the Magic Mirror allows module manager.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roramirez/MagicMirror-Module-Manager"
+  },
+  "keywords": [
+    "magic mirror",
+    "smart mirror",
+    "module manager",
+    "module",
+    "control"
+  ],
+  "author": "Rodrigo Ramírez Norambuena",
+  "contributors": "https://github.com/roramirez/MagicMirror-Module-Manager/graphs/contributors",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/roramirez/MagicMirror-Module-Manager/issues"
+  },
+  "homepage": "https://github.com/roramirez/MagicMirror-Module-Manager#README",
+  "dependencies": {
+    "simple-git": "latest"
+  }
+}
