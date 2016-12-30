@@ -52,6 +52,26 @@ module.exports = NodeHelper.create({
 			}
 		});
 
+		this.expressApp.get("/module-manager/install/:module_id", function(req, res) {
+
+			urlApi = self.config.urlApiModule + "/" + req.params.module_id;
+
+			request({url: urlApi, headers: self.getHeaderRequest()}, function (error, response, body) {
+				res.contentType("application/json");
+				if (!error && response.statusCode == 200) {
+					moduleInfo = JSON.parse(body);
+					if (self.cloneRepository(moduleInfo.github_url, moduleInfo.github_name)) {
+						res.send({status: true});
+					} else {
+						res.statusCode = 400;
+						res.send({status: false});
+					}
+				} else {
+					res.statusCode = response.statusCode;
+					res.send({status: false});
+				}
+			})
+		});
 	},
 
 	// get modules from API config
@@ -75,6 +95,7 @@ module.exports = NodeHelper.create({
 		path_to_clone = path.resolve(global.root_path + "/modules/third/" + name);
 		var git = simpleGit();
 		git.clone(url, path_to_clone);
+		return true;
 	},
 
 	// remove directory module
