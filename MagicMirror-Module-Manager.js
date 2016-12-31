@@ -9,6 +9,7 @@
 
 Module.register("MagicMirror-Module-Manager", {
 
+	// Set the minimum MagicMirror module version.
 	requiresVersion: "2.1.0",
 
 	// Default module config.
