@@ -12,6 +12,7 @@ var querystring = require('querystring');
 var simpleGit = require("simple-git");
 var path = require("path");
 var fs = require("fs");
+var async = require("async");
 
 
 module.exports = NodeHelper.create({
@@ -26,7 +27,8 @@ module.exports = NodeHelper.create({
 
 	setConfig: function() {
 		this.config = {};
-		this.config.urlApiModule = 'http://beta.magicmirror.builders/api/module';
+		//this.config.urlApiModule = 'http://beta.magicmirror.builders/api/module';
+		this.config.urlApiModule = 'http://192.168.10.110:8000/api/module';
 		this.config.limit = 20;
 	},
 
@@ -65,6 +67,15 @@ module.exports = NodeHelper.create({
 				if (!error && response.statusCode == 200) {
 					moduleInfo = JSON.parse(body);
 					if (self.cloneRepository(moduleInfo.github_url, moduleInfo.github_name)) {
+						// write description file module
+						// may is good idea separate into a function this part
+						file_description = path.resolve(global.root_path + "/modules/third/" + moduleInfo.github_name + ".json");						var content = JSON.stringify(moduleInfo);
+						fs.writeFile(file_description, content, function(err) {
+							console.log("here");
+							if (err) {
+								throw err;
+							}
+						});
 						res.send({status: true});
 					} else {
 						res.statusCode = 400;
@@ -92,7 +103,16 @@ module.exports = NodeHelper.create({
 	// return by response in JSON format.
 	getModulesInstalled: function(req, res) {
 		directory_third_modules = path.resolve(global.root_path + "/modules/third/");
-		res.send(this.getDirectories(directory_third_modules));
+		var define_modules = this.getDirectories(directory_third_modules).map(function (d) {
+		    return directory_third_modules + '/' + d + '.json';
+		})
+
+		async.map(define_modules, this.readAsync, function(err, results) {
+			var result_json = results.map(function (v) {
+				return JSON.parse(v);
+			});
+			res.send(result_json);
+		});
     },
 
 	getHeaderRequest: function() {
@@ -114,6 +134,7 @@ module.exports = NodeHelper.create({
 		path_to_remove = path.resolve(global.root_path + "/modules/third/" + name);
 		try {
 			this.rmDir(path_to_remove);
+			fs.unlinkSync(path_to_remove + ".json");
 			return true;
 		} catch(err) {
 			return;
@@ -144,6 +165,10 @@ module.exports = NodeHelper.create({
 		return fs.readdirSync(path).filter(function (file) {
 			return fs.statSync(path + '/' + file).isDirectory();
 		});
+	},
+
+	readAsync: function(file, callback) {
+	    fs.readFile(file, 'utf8', callback);
 	}
 
 });
