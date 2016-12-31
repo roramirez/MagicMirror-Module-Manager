@@ -43,6 +43,10 @@ module.exports = NodeHelper.create({
 			self.getModulesAvailables(req, res);
 		});
 
+		this.expressApp.get("/module-manager/modules/installed", function(req, res) {
+			self.getModulesInstalled(req, res);
+		});
+
 		this.expressApp.get("/module-manager/uninstall/:module_name", function(req, res) {
 			if (self.removeModule(req.params.module_name)) {
 				res.send({status: true});
@@ -83,6 +87,13 @@ module.exports = NodeHelper.create({
 		}
 		request({uri: urlApi, encoding: null, headers: this.getHeaderRequest()}).pipe(res);
 	},
+
+	// list by response the modules installed by MagicMirror-Module-Manager
+	// return by response in JSON format.
+	getModulesInstalled: function(req, res) {
+		directory_third_modules = path.resolve(global.root_path + "/modules/third/");
+		res.send(this.getDirectories(directory_third_modules));
+    },
 
 	getHeaderRequest: function() {
 		nodeVersion = Number(process.version.match(/^v(\d+\.\d+)/)[1]);
@@ -127,6 +138,12 @@ module.exports = NodeHelper.create({
 			}
 		}
 		fs.rmdirSync(dir);
+	},
+
+	getDirectories: function(path) {
+		return fs.readdirSync(path).filter(function (file) {
+			return fs.statSync(path + '/' + file).isDirectory();
+		});
 	}
 
 });
