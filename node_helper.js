@@ -27,8 +27,7 @@ module.exports = NodeHelper.create({
 
 	setConfig: function() {
 		this.config = {};
-		//this.config.urlApiModule = 'http://beta.magicmirror.builders/api/module';
-		this.config.urlApiModule = 'http://192.168.10.110:8000/api/module';
+		this.config.urlApiModule = 'http://beta.magicmirror.builders/api/module';
 		this.config.limit = 20;
 	},
 
