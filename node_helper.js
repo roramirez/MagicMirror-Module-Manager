@@ -27,7 +27,7 @@ module.exports = NodeHelper.create({
 
 	setConfig: function() {
 		this.config = {};
-		this.config.urlApiModule = 'http://beta.magicmirror.builders/api/module';
+		this.config.baseUrlApi = 'http://beta.magicmirror.builders/api';
 		this.config.limit = 20;
 	},
 
@@ -59,7 +59,7 @@ module.exports = NodeHelper.create({
 
 		this.expressApp.get("/module-manager/install/:module_id", function(req, res) {
 
-			urlApi = self.config.urlApiModule + "/" + req.params.module_id;
+			urlApi = self.config.baseUrlApi + "/module/" + req.params.module_id;
 
 			request({url: urlApi, headers: self.getHeaderRequest()}, function (error, response, body) {
 				res.contentType("application/json");
@@ -91,7 +91,7 @@ module.exports = NodeHelper.create({
 	// get modules from API config
 	getModulesAvailables: function(req, res) {
 		var query = url.parse(req.url, true).query;
-		var urlApi = this.config.urlApiModule;
+		var urlApi = this.config.baseUrlApi + '/module';
 		if (Object.keys(query).length > 0) {
 			urlApi += "?" + querystring.stringify(query);
 		}

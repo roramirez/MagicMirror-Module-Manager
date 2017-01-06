@@ -14,7 +14,7 @@ Module.register("MagicMirror-Module-Manager", {
 
 	// Default module config.
 	defaults: {
-		urlApiModule: 'http://beta.magicmirror.builders/api/module',
+		baseUrlApi: 'http://beta.magicmirror.builders/api',
 		limit: 20
 	},
 
