@@ -44,6 +44,10 @@ module.exports = NodeHelper.create({
 			self.getModulesAvailables(req, res);
 		});
 
+		this.expressApp.get("/module-manager/categories", function(req, res) {
+			self.getCategories(req, res);
+		});
+
 		this.expressApp.get("/module-manager/modules/installed", function(req, res) {
 			self.getModulesInstalled(req, res);
 		});
@@ -95,6 +99,12 @@ module.exports = NodeHelper.create({
 		if (Object.keys(query).length > 0) {
 			urlApi += "?" + querystring.stringify(query);
 		}
+		request({uri: urlApi, encoding: null, headers: this.getHeaderRequest()}).pipe(res);
+	},
+
+	// get modules from API config
+	getCategories: function(req, res) {
+		var urlApi = this.config.baseUrlApi + '/category';
 		request({uri: urlApi, encoding: null, headers: this.getHeaderRequest()}).pipe(res);
 	},
 
