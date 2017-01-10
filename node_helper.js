@@ -72,7 +72,8 @@ module.exports = NodeHelper.create({
 					if (self.cloneRepository(moduleInfo.github_url, moduleInfo.github_name)) {
 						// write description file module
 						// may is good idea separate into a function this part
-						file_description = path.resolve(global.root_path + "/modules/third/" + moduleInfo.github_name + ".json");						var content = JSON.stringify(moduleInfo);
+						file_description = path.resolve(global.root_path + "/modules/third/" + moduleInfo.github_name + ".json");
+						var content = JSON.stringify(moduleInfo);
 						fs.writeFile(file_description, content, function(err) {
 							console.log("here");
 							if (err) {
