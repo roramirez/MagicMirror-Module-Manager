@@ -27,4 +27,16 @@ Module.register("MagicMirror-Module-Manager", {
 		return ["module-manager.css"];
 	},
 
+	getModule: function(name) {
+		return MM.getModules().withClass(name)[0];
+	},
+
+	getConfigModule: function(name) {
+		return this.getModule(name).config;
+	},
+
+	getAllModules: function() {
+		return MM.getModules();
+	}
+
 });
